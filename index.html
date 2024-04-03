@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dice Game</title>
+    <style>
+      .dice {
+        width: 100px;
+        height: 100px;
+        /* border: 1px solid black; */
+        margin-bottom: 10px;
+      }
+      body {
+        text-align: center;
+
+        background-color: #1d1d1c;
+      }
+      h1 {
+        color: white;
+        font-size: 1.5rem;
+      }
+      .dice_container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      #scores {
+        color: white;
+        font-size: 1.3rem;
+        line-height: 2.3;
+      }
+      #rollBtn {
+        font-size: 1rem;
+        background-color: #808080;
+        padding: 0.8rem 3rem;
+        margin-bottom: 1.5rem;
+        border-radius: 4rem;
+        border: none;
+        cursor: pointer;
+      }
+      #reset {
+        font-size: 1rem;
+        background-color: #808080;
+        padding: 0.8rem 3rem;
+        margin-bottom: 1.5rem;
+        border-radius: 4rem;
+        border: none;
+        cursor: pointer;
+      }
+      p {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dice_container">
+      <div class="player1">
+        <h1>Player 1</h1>
+
+        <img
+          id="dicePlayer1"
+          class="dice"
+          src="dice1.png"
+          alt="Dice Player 1"
+        />
+      </div>
+      <div class="player2">
+        <h1>Player 2</h1>
+
+        <img
+          id="dicePlayer2"
+          class="dice"
+          src="dice1.png"
+          alt="Dice Player 2"
+        />
+      </div>
+    </div>
+    <button id="rollBtn">Roll</button>
+    <button id="reset">Re-Start</button>
+    <div id="scores">Player 1: 0 | Player 2: 0</div>
+    <p id="result">Player 1 is winer</p>
+
+    <script>
+      // Initialize variables
+      let resultval = document.getElementById("result");
+      let resetbtn = document.getElementById("reset");
+      const targetScore = 25; // Change this to set the target score
+      let playerScores = {
+        "Player 1": 0,
+        "Player 2": 0,
+      };
+
+      // Function to roll the dice for Player 1 and update scores
+      function rollDiceForPlayer1() {
+        const diceValue = Math.floor(Math.random() * 6) + 1;
+        playerScores["Player 1"] += diceValue;
+        updateDiceImage("dicePlayer1", diceValue);
+        updateScores();
+        checkForWinner();
+      }
+
+      // Function to roll the dice for Player 2 and update scores
+      function rollDiceForPlayer2() {
+        const diceValue = Math.floor(Math.random() * 6) + 1;
+        playerScores["Player 2"] += diceValue;
+        updateDiceImage("dicePlayer2", diceValue);
+        updateScores();
+        checkForWinner();
+      }
+
+      // Function to update the dice image
+      function updateDiceImage(diceElementId, diceValue) {
+        const diceImageElement = document.getElementById(diceElementId);
+        diceImageElement.src = `dice${diceValue}.png`;
+      }
+
+      // Function to update the score display
+      function updateScores() {
+        const scoresElement = document.getElementById("scores");
+        scoresElement.innerHTML = `Player 1 Score: ${playerScores["Player 1"]}<br>Player 2 Score: ${playerScores["Player 2"]}`;
+      }
+
+      // Function to check for a winner
+      function checkForWinner() {
+        for (const player in playerScores) {
+          if (playerScores[player] >= targetScore) {
+            resultval.style.display = "block";
+            resultval.innerHTML = `${player} wins with score of ${playerScores[player]} `;
+            resultval.style.color = "white";
+            resultval.style.fontSize = "20px";
+            resetGame();
+            return;
+          }
+        }
+      }
+
+      // Function to reset the game
+      function resetGame() {
+        playerScores["Player 1"] = 0;
+        playerScores["Player 2"] = 0;
+        updateScores();
+        // resultval.style.display = "none";
+      }
+      resetbtn.addEventListener("click", function () {
+        resultval.style.display = "none";
+        resetGame();
+      });
+
+      // Event listener for the roll button
+      document.getElementById("rollBtn").addEventListener("click", function () {
+        rollDiceForPlayer1();
+        rollDiceForPlayer2();
+      });
+
+      // Initial score display
+      updateScores();
+    </script>
+  </body>
+</html>
